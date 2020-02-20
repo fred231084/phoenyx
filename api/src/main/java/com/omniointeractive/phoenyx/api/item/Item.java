@@ -19,9 +19,11 @@ import java.util.Collections;
  */
 public abstract class Item {
 
-    private final String id, encodedId, encodedLoreLine, name;
+    private final String id, name;
     private final Material material;
     private int customModel = -1;
+
+    private String encodedId, encodedLoreLine;
 
     /**
      * Creates a new PhoenyxItem instance with no custom model data.
@@ -31,12 +33,12 @@ public abstract class Item {
      *                 will be converted.
      * @param material The Bukkit material that will visually represent this item.
      */
-    protected Item(@NotNull String id, @NotNull String name, @NotNull Material material) {
+    protected Item(@NotNull final String id, @NotNull final String name, @NotNull final Material material) {
         this.id = id;
-        this.encodedId = this.encodeId(this.id);
-        this.encodedLoreLine = String.format("%s%sPhoenix Item", this.getEncodedId(), ChatColor.DARK_PURPLE);
-        this.name = ChatColor.translateAlternateColorCodes('&', name);
+        this.name = ChatColor.WHITE + ChatColor.translateAlternateColorCodes('&', name);
         this.material = material;
+        this.generateEncodedId();
+        this.generateEncodedLoreLine();
     }
 
     /**
@@ -136,24 +138,28 @@ public abstract class Item {
      * @param itemStack The ItemStack to check.
      * @return True if the given ItemStack is an instance of this item, otherwise false.
      */
-    public boolean validate(@NotNull ItemStack itemStack) {
+    public boolean validate(@NotNull final ItemStack itemStack) {
         return itemStack.getType() == this.getMaterial() && itemStack.getItemMeta() != null
                 && itemStack.getItemMeta().getLore() != null
                 && itemStack.getItemMeta().getLore().get(0).equals(this.encodedLoreLine);
     }
 
     /**
-     * Encodes an item's identifier using Minecraft's chat color formatting codes.
-     *
-     * @param id The identifier to encode.
-     * @return The encoded identifier.
+     * Generates the encoded identifier for this item using Minecraft's chat color formatting codes.
      */
-    private String encodeId(@NotNull final String id) {
-        final String idHex = Hex.encodeHexString(id.getBytes(StandardCharsets.UTF_8));
+    protected void generateEncodedId() {
+        final String idHex = Hex.encodeHexString(this.id.getBytes(StandardCharsets.UTF_8));
         final StringBuilder encodedIdBuilder = new StringBuilder();
         for (final char c : idHex.toCharArray()) {
             encodedIdBuilder.append(String.format("&%s", c));
         }
-        return ChatColor.translateAlternateColorCodes('&', encodedIdBuilder.toString());
+        this.encodedId = ChatColor.translateAlternateColorCodes('&', encodedIdBuilder.toString());
+    }
+
+    /**
+     * Generates the encoded lore line for this item.
+     */
+    protected void generateEncodedLoreLine() {
+        this.encodedLoreLine = String.format("%s%sPhoenix Item", this.getEncodedId(), ChatColor.DARK_PURPLE);
     }
 }

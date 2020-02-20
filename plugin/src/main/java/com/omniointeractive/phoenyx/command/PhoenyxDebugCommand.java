@@ -5,30 +5,31 @@ import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Description;
 import co.aikar.commands.annotation.Subcommand;
-import com.omniointeractive.phoenyx.PhoenyxPlugin;
+import com.omniointeractive.phoenyx.Phoenyx;
 import com.omniointeractive.phoenyx.api.item.Item;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
 /**
- * Debugging command for {@link PhoenyxPlugin}.
+ * Debugging command for {@link Phoenyx}.
  */
 @CommandAlias("phoenyxdebug|phoenixdebug|pxdebug|pxd")
 @Description("Debugging command for Phoenyx.")
 public class PhoenyxDebugCommand extends BaseCommand {
 
-    private final PhoenyxPlugin plugin;
+    private final Phoenyx phoenyx;
 
     /**
      * Initialises the '/phoenyx' debug command.
      *
-     * @param plugin The parent plugin's main class instance.
+     * @param phoenyx The parent plugin's main class instance.
      */
-    public PhoenyxDebugCommand(PhoenyxPlugin plugin) {
-        this.plugin = plugin;
+    public PhoenyxDebugCommand(@NotNull final Phoenyx phoenyx) {
+        this.phoenyx = phoenyx;
     }
 
     /**
@@ -43,7 +44,7 @@ public class PhoenyxDebugCommand extends BaseCommand {
     public void debugHand(Player sender) {
         ItemStack itemStack = sender.getInventory().getItemInMainHand();
 
-        Optional<Item> optionalItem = this.plugin.getItemRegister().getItem(itemStack);
+        Optional<Item> optionalItem = this.phoenyx.getItemRegister().getItem(itemStack);
         if (optionalItem.isPresent()) {
             Item phoenyxItem = optionalItem.get();
             sender.sendMessage(String.format("ID: %s", phoenyxItem.getId()));

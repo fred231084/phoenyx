@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class JsonItem extends Item {
      * @param json The JSON object to decode into an {@link Item}.
      * @throws IllegalArgumentException If the provided JSON contains invalid values.
      */
-    public JsonItem(JsonObject json) {
+    public JsonItem(@NotNull final JsonObject json) {
         super(json.get("id").getAsString(),
                 json.get("name").getAsString(),
                 loadNullable("material", Material.getMaterial(json.get("material").getAsString())));
@@ -44,7 +45,7 @@ public class JsonItem extends Item {
         return this.placeable;
     }
 
-    private static <T> T loadNullable(String name, T t) {
+    private static <T> T loadNullable(@NotNull final String name, final T t) {
         return Optional.ofNullable(t)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Provided JSON does not contain a valid %s value!", name)));
     }
@@ -55,7 +56,7 @@ public class JsonItem extends Item {
      * @param json The JSON array to parse {@link JsonItem}s from.
      * @return The array of {@link JsonItem}s parsed from the provided JSON array.
      */
-    public static JsonItem[] parseArray(JsonArray json) {
+    public static JsonItem[] parseArray(@NotNull final JsonArray json) {
         List<JsonItem> items = new ArrayList<>();
         json.forEach(element -> {
             if (element instanceof JsonObject) {
@@ -73,7 +74,7 @@ public class JsonItem extends Item {
      * @return The array of {@link JsonItem}s parsed from the provided JSON.
      * @throws IllegalArgumentException If the provided JSON is not valid.
      */
-    public static JsonItem[] parse(JsonElement json) {
+    public static JsonItem[] parse(@NotNull final JsonElement json) {
         if (json instanceof JsonObject) {
             return new JsonItem[]{new JsonItem((JsonObject) json)};
         } else if (json instanceof JsonArray) {

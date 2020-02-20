@@ -22,7 +22,7 @@ public class ColorCodeCrypto {
      * @param value The string value to encode.
      * @return The encoded string.
      */
-    public static String encode(@NotNull String value) {
+    public static String encode(@NotNull final String value) {
         final String hex = Hex.encodeHexString(value.getBytes(StandardCharsets.UTF_8));
         final StringBuilder builder = new StringBuilder();
         for (final char c : hex.toCharArray()) {
@@ -38,7 +38,7 @@ public class ColorCodeCrypto {
      * @param value The encoded string to be decoded.
      * @return The decoded string value.
      */
-    public static String decode(@NotNull String value) throws DecoderException {
+    public static String decode(@NotNull final String value) throws DecoderException {
         final String hex = value.replaceAll("\u00a7", "");
         return new String(Hex.decodeHex(hex), StandardCharsets.UTF_8);
     }

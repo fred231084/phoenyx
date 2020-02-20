@@ -10,16 +10,16 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>phoenyx-plugin</artifactId>
+    <artifactId>phoenyx-core</artifactId>
     <version>0.1.0-rc.1</version>
     <packaging>jar</packaging>
 
-    <name>Phoenyx Plugin</name>
-    <description>Spigot plugin for Phoenyx.</description>
-    <url>https://github.com/omnio-interactive/phoenyx/tree/master/plugin</url>
+    <name>Phoenyx Core</name>
+    <description>Core addon for Phoenyx.</description>
+    <url>https://github.com/omnio-interactive/phoenyx/tree/master/core</url>
 
     <properties>
-        <project.mainClass>com.omniointeractive.phoenyx.Phoenyx</project.mainClass>
+        <project.mainClass>com.omniointeractive.phoenyx.core.PhoenyxCore</project.mainClass>
         <outputDirectory></outputDirectory>
     </properties>
 
@@ -71,23 +71,11 @@
         </resources>
     </build>
 
-    <repositories>
-        <repository>
-            <id>aikar</id>
-            <url>https://repo.aikar.co/content/groups/aikar</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>${project.parent.groupId}</groupId>
             <artifactId>phoenyx-api</artifactId>
             <version>0.1.0-rc.1</version>
-        </dependency>
-        <dependency>
-            <groupId>co.aikar</groupId>
-            <artifactId>acf-bukkit</artifactId>
-            <version>0.5.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

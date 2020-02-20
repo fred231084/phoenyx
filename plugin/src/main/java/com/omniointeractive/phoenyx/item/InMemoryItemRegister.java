@@ -1,5 +1,6 @@
 package com.omniointeractive.phoenyx.item;
 
+import com.omniointeractive.phoenyx.api.addon.Addon;
 import com.omniointeractive.phoenyx.api.item.Item;
 import com.omniointeractive.phoenyx.api.item.ItemRegister;
 import com.omniointeractive.phoenyx.api.util.ColorCodeCrypto;
@@ -8,11 +9,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -84,9 +86,32 @@ public class InMemoryItemRegister implements ItemRegister {
     /**
      * Registers {@link Item}s with this register.
      *
-     * @param items The {@link Item}s to register.
+     * @param parent The parent {@link Addon} of the items.
+     * @param items  The {@link Item}s to register.
      */
-    public void registerItems(@NotNull final Item... items) {
-        this.items.putAll(Stream.of(items).collect(Collectors.toMap(Item::getId, Function.identity())));
+    @Override
+    public void registerItems(@NotNull final Addon parent, @NotNull final Item... items) {
+        for (Item item : items) {
+            try {
+                Field idField = Item.class.getDeclaredField("id");
+                idField.setAccessible(true);
+                idField.set(item, String.format("%s:%s", parent.getAddonID(), item.getId()));
+                idField.setAccessible(false);
+                invoke(item, "generateEncodedId");
+                invoke(item, "generateEncodedLoreLine");
+                this.items.put(item.getId(), item);
+            } catch (NoSuchFieldException | NoSuchMethodException | IllegalAccessException |
+                    InvocationTargetException exception) {
+                exception.printStackTrace();
+            }
+        }
+    }
+
+    private void invoke(@NotNull final Item item, @NotNull final String methodName) throws NoSuchMethodException,
+            IllegalAccessException, InvocationTargetException {
+        Method method = Item.class.getDeclaredMethod(methodName);
+        method.setAccessible(true);
+        method.invoke(item);
+        method.setAccessible(false);
     }
 }

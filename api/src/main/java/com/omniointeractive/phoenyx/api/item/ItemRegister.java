@@ -1,5 +1,6 @@
 package com.omniointeractive.phoenyx.api.item;
 
+import com.omniointeractive.phoenyx.api.addon.Addon;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +38,8 @@ public interface ItemRegister {
     /**
      * Registers {@link Item}s with this register.
      *
-     * @param items The {@link Item}s to register.
+     * @param parent The parent {@link Addon} of the items.
+     * @param items  The {@link Item}s to register.
      */
-    void registerItems(@NotNull final Item... items);
+    void registerItems(@NotNull final Addon parent, @NotNull final Item... items);
 }

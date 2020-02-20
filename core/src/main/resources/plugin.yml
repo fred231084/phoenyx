@@ -1,0 +1,18 @@
+# Meta
+name: ${project.name}
+version: ${project.version}
+main: ${project.mainClass}
+description: ${project.parent.description}
+prefix: ${project.name}
+author: ${project.parent.organization.name}
+authors:
+  - Luke Carr
+
+# Minecraft
+load: POSTWORLD
+database: false
+depend:
+  - Phoenyx
+softdepend: []
+loadbefore: []
+api-version: 1.15

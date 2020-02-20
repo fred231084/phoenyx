@@ -2,27 +2,30 @@ package com.omniointeractive.phoenyx;
 
 import co.aikar.commands.BukkitCommandManager;
 import co.aikar.commands.CommandCompletions;
-import com.google.gson.JsonParser;
-import com.omniointeractive.phoenyx.api.item.ItemRegister;
+import com.omniointeractive.phoenyx.addon.PluginAddonManager;
+import com.omniointeractive.phoenyx.api.PhoenyxPlugin;
+import com.omniointeractive.phoenyx.api.addon.Addon;
+import com.omniointeractive.phoenyx.api.addon.AddonManager;
 import com.omniointeractive.phoenyx.api.item.Item;
-import com.omniointeractive.phoenyx.api.item.JsonItem;
+import com.omniointeractive.phoenyx.api.item.ItemRegister;
 import com.omniointeractive.phoenyx.command.PhoenyxCommand;
 import com.omniointeractive.phoenyx.command.PhoenyxDebugCommand;
 import com.omniointeractive.phoenyx.item.InMemoryItemRegister;
 import com.omniointeractive.phoenyx.item.listener.NonPlaceableListener;
+import org.bukkit.Material;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.InputStreamReader;
-import java.util.Objects;
+import java.io.File;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Main plugin class for Phoenyx. This class acts as the main entry point for Spigot into the Phoenyx.
  */
-public class PhoenyxPlugin extends JavaPlugin {
+public class Phoenyx extends PhoenyxPlugin {
 
     private BukkitCommandManager commandManager;
+    private AddonManager addonManager;
     private ItemRegister itemRegister;
 
     /**
@@ -30,14 +33,30 @@ public class PhoenyxPlugin extends JavaPlugin {
      */
     @Override
     public void onEnable() {
+        this.addonManager = new PluginAddonManager(this);
         this.itemRegister = new InMemoryItemRegister();
-        this.itemRegister.registerItems(JsonItem.parse(new JsonParser().parse(new InputStreamReader(Objects.requireNonNull(this.getResource("items/test.json"))))));
 
         // Commands
         this.setupCommands();
 
         // Listeners
         this.setupListeners();
+
+        // Addons
+        File addonsDir = new File(this.getDataFolder(), "addons");
+        addonsDir.mkdirs();
+        this.addonManager.loadAddons(addonsDir);
+        this.addonManager.enableAddons();
+    }
+
+    /**
+     * Returns the global {@link AddonManager} for Phoenyx.
+     *
+     * @return Phoenyx's global {@link AddonManager}.
+     */
+    @Override
+    public AddonManager getAddonManager() {
+        return this.addonManager;
     }
 
     /**
@@ -45,6 +64,7 @@ public class PhoenyxPlugin extends JavaPlugin {
      *
      * @return Phoenyx's global {@link ItemRegister}.
      */
+    @Override
     public ItemRegister getItemRegister() {
         return this.itemRegister;
     }
@@ -63,8 +83,13 @@ public class PhoenyxPlugin extends JavaPlugin {
      */
     private void registerCommandCompletions() {
         CommandCompletions<?> commandCompletions = this.commandManager.getCommandCompletions();
-        commandCompletions.registerCompletion("item_ids", c -> this.itemRegister.getItems().map(Item::getId)
+        commandCompletions.registerAsyncCompletion("items", c -> Stream.concat(
+                Stream.of(Material.values()).filter(Material::isInteractable)
+                        .map(material -> String.format("minecraft:%s", material.name().toLowerCase())),
+                this.itemRegister.getItems().map(Item::getId).sorted())
                 .collect(Collectors.toList()));
+        commandCompletions.registerAsyncCompletion("addons", c -> this.addonManager.getAddons()
+                .map(Addon::getAddonID).collect(Collectors.toList()));
     }
 
     /**
