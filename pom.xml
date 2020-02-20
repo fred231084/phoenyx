@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.omniointeractive</groupId>
+    <artifactId>phoenyx</artifactId>
+    <version>0.1.0-rc.1</version>
+    <packaging>pom</packaging>
+
+    <name>Phoenyx</name>
+    <description>Gameplay overhaul plugin for Minecraft servers running Spigot 1.15.x!</description>
+    <url>https://github.com/omnio-interactive/phoenyx</url>
+
+    <organization>
+        <name>Omnio Interactive</name>
+        <url>https://omniointeractive.com</url>
+    </organization>
+
+    <issueManagement>
+        <system>Github</system>
+        <url>https://github.com/omnio-interactive/phoenyx/issues</url>
+    </issueManagement>
+
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>https://github.com/omnio-interactive/phoenyx/blob/master/LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Luke Carr</name>
+            <organization>Omnio Interactive</organization>
+            <email>luke@omniointeractive.com</email>
+        </developer>
+    </developers>
+
+    <modules>
+        <module>api</module>
+        <module>plugin</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>spigot</id>
+            <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.15.2-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>
