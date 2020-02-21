@@ -1,8 +1,13 @@
 package com.omniointeractive.phoenyx.item;
 
+import com.omniointeractive.phoenyx.Phoenyx;
 import com.omniointeractive.phoenyx.api.addon.Addon;
 import com.omniointeractive.phoenyx.api.item.Item;
 import com.omniointeractive.phoenyx.api.item.ItemRegister;
+import com.omniointeractive.phoenyx.api.item.JsonItem;
+import com.omniointeractive.phoenyx.api.item.crafting.Recipe;
+import com.omniointeractive.phoenyx.api.item.crafting.ShapedRecipe;
+import com.omniointeractive.phoenyx.api.item.interfaces.Craftable;
 import com.omniointeractive.phoenyx.api.util.ColorCodeCrypto;
 import org.apache.commons.codec.DecoderException;
 import org.bukkit.ChatColor;
@@ -18,16 +23,20 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- * Implementation of {@link ItemRegister} using an in-memory system for storing registered items (LinkedHashMap).
+ * Implementation of {@link ItemRegister} using an in-memory system for storing registered {@link Item}s.
  */
 public class InMemoryItemRegister implements ItemRegister {
 
+    private final Phoenyx phoenyx;
     private final Map<String, Item> items;
 
     /**
      * Instantiates the register for {@link Item}s.
+     *
+     * @param phoenyx The parent plugin's main class instance.
      */
-    public InMemoryItemRegister() {
+    public InMemoryItemRegister(@NotNull final Phoenyx phoenyx) {
+        this.phoenyx = phoenyx;
         this.items = new LinkedHashMap<>();
     }
 
@@ -122,5 +131,31 @@ public class InMemoryItemRegister implements ItemRegister {
         method.setAccessible(true);
         method.invoke(item);
         method.setAccessible(false);
+    }
+
+    /**
+     * Registers all {@link com.omniointeractive.phoenyx.api.item.crafting.Recipe}s provided by {@link Item}s in this
+     * register.
+     */
+    @Override
+    public void registerRecipes() {
+        for (Item item : this.items.values()) {
+            Recipe recipe = null;
+
+            if (item instanceof JsonItem) {
+                // TODO: Recipes defined in JSON
+            } else if (item.getClass().isAnnotationPresent(Craftable.class)) {
+                Craftable craftable = item.getClass().getAnnotation(Craftable.class);
+                if (craftable.type() == Recipe.Type.SHAPED) {
+                    recipe = new ShapedRecipe(this.phoenyx.getItemRegister(), craftable.ingredients(), item);
+                } else if (craftable.type() == Recipe.Type.SHAPELESS) {
+                    // TODO: Shapeless recipes
+                }
+            }
+
+            if (recipe != null) {
+                phoenyx.getRecipeRegister().register(recipe);
+            }
+        }
     }
 }

@@ -8,9 +8,12 @@ import com.omniointeractive.phoenyx.api.addon.Addon;
 import com.omniointeractive.phoenyx.api.addon.AddonManager;
 import com.omniointeractive.phoenyx.api.item.Item;
 import com.omniointeractive.phoenyx.api.item.ItemRegister;
+import com.omniointeractive.phoenyx.api.item.crafting.RecipeRegister;
 import com.omniointeractive.phoenyx.command.PhoenyxCommand;
 import com.omniointeractive.phoenyx.command.PhoenyxDebugCommand;
 import com.omniointeractive.phoenyx.item.InMemoryItemRegister;
+import com.omniointeractive.phoenyx.item.crafting.RecipeListener;
+import com.omniointeractive.phoenyx.item.crafting.listener.InMemoryRecipeRegister;
 import com.omniointeractive.phoenyx.item.listener.BlockBreakListener;
 import com.omniointeractive.phoenyx.item.listener.PlaceListener;
 import org.bukkit.Material;
@@ -28,6 +31,7 @@ public class Phoenyx extends PhoenyxPlugin {
     private BukkitCommandManager commandManager;
     private AddonManager addonManager;
     private ItemRegister itemRegister;
+    private RecipeRegister recipeRegister;
 
     /**
      * Invoked when the server starts.
@@ -35,7 +39,8 @@ public class Phoenyx extends PhoenyxPlugin {
     @Override
     public void onEnable() {
         this.addonManager = new PluginAddonManager(this);
-        this.itemRegister = new InMemoryItemRegister();
+        this.itemRegister = new InMemoryItemRegister(this);
+        this.recipeRegister = new InMemoryRecipeRegister();
 
         // Commands
         this.setupCommands();
@@ -48,6 +53,9 @@ public class Phoenyx extends PhoenyxPlugin {
         addonsDir.mkdirs();
         this.addonManager.loadAddons(addonsDir);
         this.addonManager.enableAddons();
+
+        // Register recipes last
+        this.itemRegister.registerRecipes();
     }
 
     /**
@@ -68,6 +76,16 @@ public class Phoenyx extends PhoenyxPlugin {
     @Override
     public ItemRegister getItemRegister() {
         return this.itemRegister;
+    }
+
+    /**
+     * Returns the global {@link RecipeRegister} used by Phoenyx.
+     *
+     * @return The {@link RecipeRegister} instance for Phoenyx.
+     */
+    @Override
+    public RecipeRegister getRecipeRegister() {
+        return this.recipeRegister;
     }
 
     /**
@@ -108,5 +126,6 @@ public class Phoenyx extends PhoenyxPlugin {
         PluginManager pm = this.getServer().getPluginManager();
         pm.registerEvents(new PlaceListener(this), this);
         pm.registerEvents(new BlockBreakListener(this), this);
+        pm.registerEvents(new RecipeListener(this), this);
     }
 }

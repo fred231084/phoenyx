@@ -2,6 +2,7 @@ package com.omniointeractive.phoenyx.api;
 
 import com.omniointeractive.phoenyx.api.addon.AddonManager;
 import com.omniointeractive.phoenyx.api.item.ItemRegister;
+import com.omniointeractive.phoenyx.api.item.crafting.RecipeRegister;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -22,5 +23,12 @@ public abstract class PhoenyxPlugin extends JavaPlugin {
      * @return The {@link ItemRegister} instance for Phoenyx.
      */
     public abstract ItemRegister getItemRegister();
+
+    /**
+     * Returns the global {@link RecipeRegister} used by Phoenyx.
+     *
+     * @return The {@link RecipeRegister} instance for Phoenyx.
+     */
+    public abstract RecipeRegister getRecipeRegister();
 
 }

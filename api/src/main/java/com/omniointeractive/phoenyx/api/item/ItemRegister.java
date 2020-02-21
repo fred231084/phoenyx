@@ -42,4 +42,10 @@ public interface ItemRegister {
      * @param items  The {@link Item}s to register.
      */
     void registerItems(@NotNull final Addon parent, @NotNull final Item... items);
+
+    /**
+     * Registers all {@link com.omniointeractive.phoenyx.api.item.crafting.Recipe}s provided by {@link Item}s in this
+     * register.
+     */
+    void registerRecipes();
 }
