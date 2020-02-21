@@ -5,8 +5,6 @@ main: ${project.mainClass}
 description: ${project.parent.description}
 prefix: ${project.parent.name}
 author: ${project.parent.organization.name}
-authors:
-  - Luke Carr
 
 # Minecraft
 load: POSTWORLD
