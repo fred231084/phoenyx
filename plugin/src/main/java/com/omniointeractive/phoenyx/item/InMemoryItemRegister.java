@@ -75,7 +75,10 @@ public class InMemoryItemRegister implements ItemRegister {
             String encodedId = encodedLore.replaceAll(String.format("%sPhoenix Item", ChatColor.DARK_PURPLE), "");
             try {
                 String id = ColorCodeCrypto.decode(encodedId);
-                return this.getItem(id);
+                Optional<Item> item = this.getItem(id);
+                if (item.isPresent() && item.get().validate(itemStack)) {
+                    return item;
+                }
             } catch (DecoderException exception) {
                 exception.printStackTrace();
             }
