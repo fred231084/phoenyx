@@ -13,3 +13,41 @@ depend: []
 softdepend: []
 loadbefore: []
 api-version: 1.15
+
+# Commands
+commands:
+  phoenyx:
+    description: Main command for Phoeynx.
+    usage: /phoenyx <give|addon>
+    aliases:
+      - phoenix
+      - px
+  phoenyxdebug:
+    description: Debugging command for Phoenyx.
+    usage: /phoenyxdebug <hand>
+    aliases:
+      - phoenixdebug
+      - pxdebug
+      - pxd
+
+# Permissions
+permissions:
+  phoenyx.*:
+    default: op
+    children:
+      phoenyx.give: true
+      phoenyx.addons: true
+      phoenyx.debug.*: true
+  phoenyx.give:
+    default: op
+    description: Allows you use the spawn custom items.
+  phoenyx.addons:
+    default: op
+    description: Allows you to see the list of addons enabled.
+  phoenyx.debug.*:
+    default: op
+    children:
+      phoenyx.debug.hand: true
+  phoenyx.debug.hand:
+    default: op
+    description: Allows you to debug the current custom item in your hand.

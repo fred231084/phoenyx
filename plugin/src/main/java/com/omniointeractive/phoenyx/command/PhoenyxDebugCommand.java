@@ -37,7 +37,7 @@ public class PhoenyxDebugCommand extends BaseCommand {
      * @param sender The sender of the command.
      */
     @Subcommand("hand")
-    @CommandPermission("phoenyxdebug.hand")
+    @CommandPermission("phoenyx.debug.hand")
     @Description("Debugs the custom Phoenyx item held by the sender.")
     public void debugHand(Player sender) {
         ItemStack itemStack = sender.getInventory().getItemInMainHand();
