@@ -1,6 +1,7 @@
 package com.omniointeractive.phoenyx.item.listener;
 
 import com.omniointeractive.phoenyx.Phoenyx;
+import com.omniointeractive.phoenyx.api.item.interfaces.Placeable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -8,10 +9,10 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Listener class to prevent {@link com.omniointeractive.phoenyx.api.item.Item}'s tagged as
- * {@link com.omniointeractive.phoenyx.api.item.annotation.NonPlaceable} from being placed in the world.
+ * Listener class to only allow {@link com.omniointeractive.phoenyx.api.item.Item}'s tagged as {@link Placeable} to be
+ * placed in the world.
  */
-public class NonPlaceableListener implements Listener {
+public class PlaceableListener implements Listener {
 
     private final Phoenyx phoenyx;
 
@@ -20,7 +21,7 @@ public class NonPlaceableListener implements Listener {
      *
      * @param phoenyx The parent plugin's main class instance.
      */
-    public NonPlaceableListener(@NotNull final Phoenyx phoenyx) {
+    public PlaceableListener(@NotNull final Phoenyx phoenyx) {
         this.phoenyx = phoenyx;
     }
 

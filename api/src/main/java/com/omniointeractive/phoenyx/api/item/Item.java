@@ -1,7 +1,7 @@
 package com.omniointeractive.phoenyx.api.item;
 
 import com.omniointeractive.phoenyx.api.addon.Addon;
-import com.omniointeractive.phoenyx.api.item.annotation.NonPlaceable;
+import com.omniointeractive.phoenyx.api.item.interfaces.Placeable;
 import org.apache.commons.codec.binary.Hex;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -29,7 +29,7 @@ public abstract class Item {
     private String encodedId, encodedLoreLine;
 
     /**
-     * Creates a new PhoenyxItem instance with no custom model data.
+     * Creates a new item instance with no custom model data.
      *
      * @param id       The unique identifier of the item.
      * @param name     The 'pretty' display name for the item. This value can contain '&' Minecraft color codes that
@@ -117,7 +117,7 @@ public abstract class Item {
      * @return True if this {@link Item} can be placed, otherwise false.
      */
     public boolean isPlaceable() {
-        return !this.getClass().isAnnotationPresent(NonPlaceable.class);
+        return this instanceof Placeable;
     }
 
     /**

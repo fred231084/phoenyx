@@ -15,7 +15,7 @@ import java.util.Optional;
  */
 public class JsonItem extends Item {
 
-    private boolean placeable = true;
+    private boolean placeable = false;
 
     /**
      * Initialises a new {@link JsonItem}.
