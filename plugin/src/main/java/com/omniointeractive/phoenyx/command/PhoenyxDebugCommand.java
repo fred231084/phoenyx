@@ -1,13 +1,11 @@
 package com.omniointeractive.phoenyx.command;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Description;
-import co.aikar.commands.annotation.Subcommand;
+import co.aikar.commands.annotation.*;
 import com.omniointeractive.phoenyx.Phoenyx;
 import com.omniointeractive.phoenyx.api.item.Item;
-import org.bukkit.ChatColor;
+import com.omniointeractive.phoenyx.api.util.messaging.MessageStyle;
+import com.omniointeractive.phoenyx.api.util.messaging.Messenger;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -47,13 +45,16 @@ public class PhoenyxDebugCommand extends BaseCommand {
         Optional<Item> optionalItem = this.phoenyx.getItemRegister().getItem(itemStack);
         if (optionalItem.isPresent()) {
             Item phoenyxItem = optionalItem.get();
-            sender.sendMessage(String.format("ID: %s", phoenyxItem.getId()));
-            sender.sendMessage(String.format("Name: %s", phoenyxItem.getName()));
-            sender.sendMessage(String.format("Material: %s", phoenyxItem.getMaterial()));
-            sender.sendMessage(String.format("Custom Model Data: %s", phoenyxItem.getCustomModel()));
-            sender.sendMessage(String.format("Item Class: %s", phoenyxItem.getClass().getName()));
+            Messenger m = Messenger.getPhoenyxMessenger();
+            m.create(String.format("ID: %s", phoenyxItem.getId())).send(sender);
+            m.create(String.format("Name: %s", phoenyxItem.getName())).send(sender);
+            m.create(String.format("Material: %s", phoenyxItem.getMaterial())).send(sender);
+            m.create(String.format("Custom Model Data: %s", phoenyxItem.getCustomModel() > -1 ? phoenyxItem.getCustomModel() : "None"))
+                    .send(sender);
+            m.create(String.format("Java Class: %s", phoenyxItem.getClass().getName())).send(sender);
         } else {
-            sender.sendMessage(ChatColor.RED + "The item you are currently holding is not a custom Phoenyx item!");
+            Messenger.getPhoenyxMessenger().create("The item you're holding is not a custom item!", MessageStyle.ERROR)
+                    .send(sender);
         }
     }
 }

@@ -5,12 +5,15 @@ import co.aikar.commands.annotation.*;
 import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import com.omniointeractive.phoenyx.Phoenyx;
 import com.omniointeractive.phoenyx.api.item.Item;
-import org.bukkit.ChatColor;
+import com.omniointeractive.phoenyx.api.util.messaging.MessageStyle;
+import com.omniointeractive.phoenyx.api.util.messaging.Messenger;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -43,11 +46,6 @@ public class PhoenyxCommand extends BaseCommand {
     @CommandCompletion("@players @items @range:1-64")
     @Description("Gives a custom Phoenyx item to a player.")
     public void give(CommandSender sender, OnlinePlayer player, String itemID, @Default("1") int amount) {
-        if (player.getPlayer() == null) {
-            sender.sendMessage(ChatColor.RED + "That player is not online!");
-            return;
-        }
-
         if (itemID.split(":")[0].equalsIgnoreCase("minecraft")) {
             this.phoenyx.getServer().dispatchCommand(sender,
                     String.format("minecraft:give %s %s %d", player.getPlayer().getName(), itemID, amount));
@@ -59,10 +57,11 @@ public class PhoenyxCommand extends BaseCommand {
             ItemStack itemStack = item.get().build();
             itemStack.setAmount(amount);
             player.getPlayer().getInventory().addItem(itemStack);
-            sender.sendMessage(String.format("Gave %d [%s] to %s", amount,
-                    Objects.requireNonNull(itemStack.getItemMeta()).getDisplayName(), player.getPlayer().getName()));
+            Messenger.getPhoenyxMessenger().create(String.format("Gave %d [%s] to %s", amount, item.get().getName(),
+                    player.getPlayer().getName())).send(sender);
         } else {
-            sender.sendMessage(ChatColor.RED + "No item was found with that ID!");
+            Messenger.getPhoenyxMessenger().create(String.format("No item was found with ID '%s'!", itemID),
+                    MessageStyle.ERROR).send(sender);
         }
     }
 
@@ -76,12 +75,19 @@ public class PhoenyxCommand extends BaseCommand {
     @CommandPermission("phoenyx.addons")
     @Description("Lists all Phoenyx addons currently enabled.")
     public void listAddons(CommandSender sender) {
-        StringBuilder builder = new StringBuilder("Phoenyx Addons: ");
+        ComponentBuilder builder = new ComponentBuilder("Addons: ");
         this.phoenyx.getAddonManager().getAddons().forEach(addon -> {
-            builder.append(addon.getAddonName());
+            builder.append(addon.getAddonName()).color(addon.isEnabled() ? ChatColor.GREEN : ChatColor.RED);
+            builder.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(addon.getAddonName())
+                    .append(" (")
+                    .append(addon.getAddonVersion()).color(ChatColor.GREEN)
+                    .append(")").color(ChatColor.WHITE)
+                    .append("\n")
+                    .append(addon.getAddonDescription())
+                    .create()));
             builder.append(", ");
         });
-        builder.setLength(builder.length() - 2);
-        sender.sendMessage(builder.toString());
+        builder.removeComponent(builder.getCursor());
+        Messenger.getPhoenyxMessenger().create(builder.create()).send(sender);
     }
 }

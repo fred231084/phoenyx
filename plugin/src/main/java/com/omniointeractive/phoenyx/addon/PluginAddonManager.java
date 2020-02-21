@@ -3,6 +3,7 @@ package com.omniointeractive.phoenyx.addon;
 import com.omniointeractive.phoenyx.Phoenyx;
 import com.omniointeractive.phoenyx.api.addon.Addon;
 import com.omniointeractive.phoenyx.api.addon.AddonManager;
+import com.omniointeractive.phoenyx.api.util.messaging.Messenger;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.Plugin;
@@ -99,15 +100,21 @@ public class PluginAddonManager implements AddonManager {
 
     private boolean inject(@NotNull final Addon addon) {
         try {
-            Field itemRegisterField = Addon.class.getDeclaredField("itemRegister");
-            itemRegisterField.setAccessible(true);
-            itemRegisterField.set(addon, this.phoenyx.getItemRegister());
-            itemRegisterField.setAccessible(false);
+            this.setField(addon, "itemRegister", this.phoenyx.getItemRegister());
+            this.setField(addon, "messenger", Messenger.getAddonMessenger(addon));
         } catch (NoSuchFieldException | IllegalAccessException exception) {
             this.phoenyx.getLogger().severe(String.format("Unable to inject Phoenyx instances into addon '%s'!",
                     addon.getClass().getSimpleName()));
             return false;
         }
         return true;
+    }
+
+    private void setField(@NotNull final Addon addon, @NotNull final String field, Object object)
+            throws NoSuchFieldException, IllegalAccessException {
+        Field itemRegisterField = Addon.class.getDeclaredField(field);
+        itemRegisterField.setAccessible(true);
+        itemRegisterField.set(addon, object);
+        itemRegisterField.setAccessible(false);
     }
 }

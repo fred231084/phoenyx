@@ -2,6 +2,7 @@ package com.omniointeractive.phoenyx.api.addon;
 
 import com.omniointeractive.phoenyx.api.item.Item;
 import com.omniointeractive.phoenyx.api.item.ItemRegister;
+import com.omniointeractive.phoenyx.api.util.messaging.Messenger;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public abstract class Addon extends JavaPlugin {
 
     private ItemRegister itemRegister;
+    private Messenger messenger;
 
     /**
      * Returns the {@link ItemRegister} for Phoenyx. With this instance, custom
@@ -31,6 +33,17 @@ public abstract class Addon extends JavaPlugin {
      */
     protected void registerItems(@NotNull final Item... items) {
         this.itemRegister.registerItems(this, items);
+    }
+
+    /**
+     * Returns the {@link Messenger} for this addon. With this instance,
+     * {@link com.omniointeractive.phoenyx.api.util.messaging.Message}s can be created and sent to players (with
+     * consistent formatting across Phoenyx).
+     *
+     * @return The {@link Messenger} instance.
+     */
+    protected Messenger getMessenger() {
+        return this.messenger;
     }
 
     /**
