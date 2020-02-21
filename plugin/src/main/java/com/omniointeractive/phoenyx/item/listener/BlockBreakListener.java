@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -34,12 +35,12 @@ public class BlockBreakListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBreak(BlockBreakEvent event) {
         if (!BlockBreakCheck.isGhostEvent(event)) {
-            this.phoenyx.getItemRegister().getItem(event.getPlayer().getInventory().getItemInMainHand())
-                    .ifPresent(item -> {
-                        if (item instanceof BlockBreaking) {
-                            ((BlockBreaking) item).onBlockBreak(event);
-                        }
-                    });
+            ItemStack itemStack = event.getPlayer().getInventory().getItemInMainHand();
+            this.phoenyx.getItemRegister().getItem(itemStack).ifPresent(item -> {
+                if (item instanceof BlockBreaking) {
+                    ((BlockBreaking) item).onBlockBreak(event, itemStack);
+                }
+            });
         }
     }
 }
