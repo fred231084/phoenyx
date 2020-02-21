@@ -5,13 +5,13 @@
     <parent>
         <artifactId>phoenyx</artifactId>
         <groupId>com.omniointeractive</groupId>
-        <version>0.1.0-rc.1</version>
+        <version>0.1.0</version>
         <relativePath>../</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>phoenyx-plugin</artifactId>
-    <version>0.1.0-rc.1</version>
+    <version>0.1.0</version>
     <packaging>jar</packaging>
 
     <name>Phoenyx Plugin</name>
