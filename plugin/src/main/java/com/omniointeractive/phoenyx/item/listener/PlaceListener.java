@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * Listener class to only allow {@link com.omniointeractive.phoenyx.api.item.Item}'s tagged as {@link Placeable} to be
  * placed in the world.
  */
-public class PlaceableListener implements Listener {
+public class PlaceListener implements Listener {
 
     private final Phoenyx phoenyx;
 
@@ -21,7 +21,7 @@ public class PlaceableListener implements Listener {
      *
      * @param phoenyx The parent plugin's main class instance.
      */
-    public PlaceableListener(@NotNull final Phoenyx phoenyx) {
+    public PlaceListener(@NotNull final Phoenyx phoenyx) {
         this.phoenyx = phoenyx;
     }
 

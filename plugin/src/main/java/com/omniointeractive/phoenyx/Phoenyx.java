@@ -11,7 +11,7 @@ import com.omniointeractive.phoenyx.api.item.ItemRegister;
 import com.omniointeractive.phoenyx.command.PhoenyxCommand;
 import com.omniointeractive.phoenyx.command.PhoenyxDebugCommand;
 import com.omniointeractive.phoenyx.item.InMemoryItemRegister;
-import com.omniointeractive.phoenyx.item.listener.PlaceableListener;
+import com.omniointeractive.phoenyx.item.listener.PlaceListener;
 import org.bukkit.Material;
 import org.bukkit.plugin.PluginManager;
 
@@ -105,6 +105,6 @@ public class Phoenyx extends PhoenyxPlugin {
      */
     private void setupListeners() {
         PluginManager pm = this.getServer().getPluginManager();
-        pm.registerEvents(new PlaceableListener(this), this);
+        pm.registerEvents(new PlaceListener(this), this);
     }
 }
