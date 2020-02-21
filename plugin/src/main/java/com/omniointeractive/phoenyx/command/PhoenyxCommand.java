@@ -57,8 +57,8 @@ public class PhoenyxCommand extends BaseCommand {
             ItemStack itemStack = item.get().build();
             itemStack.setAmount(amount);
             player.getPlayer().getInventory().addItem(itemStack);
-            Messenger.getPhoenyxMessenger().create(String.format("Gave %d [%s] to %s", amount, item.get().getName(),
-                    player.getPlayer().getName())).send(sender);
+            sender.spigot().sendMessage(new ComponentBuilder(String.format("Gave %d [%s] to %s", amount, item.get().getName(),
+                    player.getPlayer().getName())).create());
         } else {
             Messenger.getPhoenyxMessenger().create(String.format("No item was found with ID '%s'!", itemID),
                     MessageStyle.ERROR).send(sender);
