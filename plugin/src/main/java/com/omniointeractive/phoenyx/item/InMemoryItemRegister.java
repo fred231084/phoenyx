@@ -93,18 +93,24 @@ public class InMemoryItemRegister implements ItemRegister {
     public void registerItems(@NotNull final Addon parent, @NotNull final Item... items) {
         for (Item item : items) {
             try {
-                Field idField = Item.class.getDeclaredField("id");
-                idField.setAccessible(true);
-                idField.set(item, String.format("%s:%s", parent.getAddonID(), item.getId()));
-                idField.setAccessible(false);
-                invoke(item, "generateEncodedId");
-                invoke(item, "generateEncodedLoreLine");
+                this.setField(item, "addon", parent);
+                this.setField(item, "id", String.format("%s:%s", parent.getAddonID(), item.getId()));
+                this.invoke(item, "generateEncodedId");
+                this.invoke(item, "generateEncodedLoreLine");
                 this.items.put(item.getId(), item);
             } catch (NoSuchFieldException | NoSuchMethodException | IllegalAccessException |
                     InvocationTargetException exception) {
                 exception.printStackTrace();
             }
         }
+    }
+
+    private void setField(@NotNull final Item item, @NotNull final String field, Object object)
+            throws NoSuchFieldException, IllegalAccessException {
+        Field itemRegisterField = Item.class.getDeclaredField(field);
+        itemRegisterField.setAccessible(true);
+        itemRegisterField.set(item, object);
+        itemRegisterField.setAccessible(false);
     }
 
     private void invoke(@NotNull final Item item, @NotNull final String methodName) throws NoSuchMethodException,

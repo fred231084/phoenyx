@@ -51,6 +51,7 @@ public class PhoenyxDebugCommand extends BaseCommand {
             m.create(String.format("Material: %s", phoenyxItem.getMaterial())).send(sender);
             m.create(String.format("Custom Model Data: %s", phoenyxItem.getCustomModel() > -1 ? phoenyxItem.getCustomModel() : "None"))
                     .send(sender);
+            m.create(String.format("Addon: %s", phoenyxItem.getAddon().getAddonName())).send(sender);
             m.create(String.format("Java Class: %s", phoenyxItem.getClass().getName())).send(sender);
         } else {
             Messenger.getPhoenyxMessenger().create("The item you're holding is not a custom item!", MessageStyle.ERROR)

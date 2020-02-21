@@ -1,5 +1,6 @@
 package com.omniointeractive.phoenyx.api.item;
 
+import com.omniointeractive.phoenyx.api.addon.Addon;
 import com.omniointeractive.phoenyx.api.item.annotation.NonPlaceable;
 import org.apache.commons.codec.binary.Hex;
 import org.bukkit.ChatColor;
@@ -18,6 +19,8 @@ import java.util.Collections;
  * @since 0.1.0-rc.1
  */
 public abstract class Item {
+
+    private Addon addon;
 
     private final String id, name;
     private final Material material;
@@ -39,6 +42,15 @@ public abstract class Item {
         this.material = material;
         this.generateEncodedId();
         this.generateEncodedLoreLine();
+    }
+
+    /**
+     * Returns the parent {@link Addon} that 'owns' this item.
+     *
+     * @return The item's {@link Addon}.
+     */
+    public Addon getAddon() {
+        return this.addon;
     }
 
     /**
