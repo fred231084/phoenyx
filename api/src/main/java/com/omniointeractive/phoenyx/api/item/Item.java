@@ -117,7 +117,7 @@ public abstract class Item {
      * @return True if this {@link Item} can be placed, otherwise false.
      */
     public boolean isPlaceable() {
-        return this instanceof Placeable;
+        return this.getClass().isAnnotationPresent(Placeable.class);
     }
 
     /**
