@@ -1,9 +1,11 @@
-<a href="https://github.com/omnio-interactive/phoenyx">
-    <img src="https://i.imgur.com/t5CAJR5.png" alt="Phoenyx logo" title="Phoenyx" align="right" height="60" />
+<a href="https://discord.gg/xS7qDnr" target="_blank">
+  <img src="https://i.imgur.com/RWy1aAY.png" alt="Discord" title="Phoenyx Discord" align="right" height="60 />
 </a>
-
-Phoenyx
-=
+<a href="https://github.com/omnio-interactive/phoenyx">
+  <img src="https://i.imgur.com/t5CAJR5.png" alt="Phoenyx logo" title="Phoenyx" align="right" height="60" />
+</a>
+                                                                                                         
+# Phoenyx
 ![Build Status](https://img.shields.io/travis/com/omnio-interactive/phoenyx?style=for-the-badge)
 ![Open issues](https://img.shields.io/github/issues-raw/omnio-interactive/phoenyx?style=for-the-badge)
 ![Total Downloads](https://img.shields.io/github/downloads/omnio-interactive/phoenyx/total?style=for-the-badge)
